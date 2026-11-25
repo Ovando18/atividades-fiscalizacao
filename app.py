@@ -19,7 +19,7 @@ from dados_fiscalizacao import (
     MICRORREGIOES_2027,
     MUNICIPIOS_MS,
 )
-from pdf_generator import fmt_data, gerar_pdf, localizar_logo
+from pdf_generator import agora_ms, fmt_data, gerar_pdf, localizar_logo
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOGO_PATH = localizar_logo()  # logo_crea_ms.png/.jpg na raiz; None -> cabeçalho tipográfico
@@ -100,8 +100,8 @@ def _init_state():
         st.session_state.atv_custom = []
     for a in _todas_atividades():
         st.session_state.setdefault(_key_atv(a), a in ATIVIDADES_PADRAO)
-    st.session_state.setdefault("data_inicio", date.today())
-    st.session_state.setdefault("data_fim", date.today() + timedelta(days=4))
+    st.session_state.setdefault("data_inicio", agora_ms().date())
+    st.session_state.setdefault("data_fim", agora_ms().date() + timedelta(days=4))
 
 
 def cb_marcar_todas():
@@ -348,7 +348,7 @@ else:
         atividades=atividades_sel,
         observacoes=observacoes,
         logo_path=LOGO_PATH,
-        emitido_em=datetime.now(),
+        emitido_em=agora_ms(),
     )
     nome_arq = (f"Folha_Atividades_{_slug(agente).upper()}_"
                 f"{data_inicio.strftime('%Y%m%d')}-{data_fim.strftime('%Y%m%d')}.pdf")

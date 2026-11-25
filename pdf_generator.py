@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import os
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 from xml.sax.saxutils import escape
 
 from reportlab.lib import colors
@@ -29,6 +30,13 @@ VERDE = colors.HexColor("#00843D")
 CINZA_CLARO = colors.HexColor("#F4F6F9")
 CINZA_LINHA = colors.HexColor("#C9D1DC")
 CINZA_TEXTO = colors.HexColor("#5A6472")
+
+FUSO_MS = ZoneInfo("America/Campo_Grande")  # horário oficial de Mato Grosso do Sul
+
+
+def agora_ms() -> datetime:
+    return datetime.now(FUSO_MS)
+
 
 _BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -147,7 +155,7 @@ def gerar_pdf(
     emitido_em: datetime | None = None,
 ) -> bytes:
     """Gera a Folha de Atividades e devolve os bytes do PDF."""
-    emitido_em = emitido_em or datetime.now()
+    emitido_em = emitido_em or agora_ms()
     logo_path = logo_path or localizar_logo()
     buffer = io.BytesIO()
     margem = 14 * mm
